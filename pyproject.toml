@@ -1,0 +1,16 @@
+[project]
+name = "beacon-test-photos"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "opencv-python>=5.0.0.93",
+    "ruff>=0.16.3",
+    "ty>=0.0.72",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# scratch.py is a REPL scratchpad: bare expressions and throwaway variables are intentional.
+"comb.py" = ["B018", "F841"]
+"hue_gate.py" = ["B018", "F841"]
