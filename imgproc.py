@@ -11,19 +11,24 @@ def thresh_otsu(img):
 
 
 def to_grey(img: np.ndarray):
+    if img.dtype == np.bool_:
+        return (img * np.uint8(255)).astype(np.uint8)
     return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
 
 def bin2grey(sel: np.ndarray) -> np.ndarray:
+    """DEPRECATED: use to_grey"""
     return (sel * np.uint8(255)).astype(np.uint8)
 
 
 def to_rgb(img: np.ndarray):
     if img.dtype == np.bool_:
-        img = cv2.cvtColor(bin2grey(img), cv2.COLOR_GRAY2RGB)
+        return cv2.cvtColor(bin2grey(img), cv2.COLOR_GRAY2RGB)
     elif img.ndim == 2:
-        img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
-    return img
+        return cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+    else:
+        # defensive copy as other conversions produce new image
+        return img.copy()
 
 
 def keep_top_k_pc(img: np.ndarray, k: float):

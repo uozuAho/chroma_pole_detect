@@ -30,6 +30,7 @@ import cv2
 import numpy as np
 
 from detectors.detector import Detector
+from imgproc import to_grey
 from my_types import DetectCentroidResult
 
 HUE_GREEN = (40, 85)
@@ -119,7 +120,15 @@ def process_frame(
     h, s, v = cv2.split(hsv)
 
     hue_mask = _hue_mask(h)
-    steps.append(("2. hue windows", _as_mask(hue_mask)))
+    steps.append(("hue mask", hue_mask))
+    sat_mask = s >= sat_floor
+    steps.append(("sat floor", sat_mask))
+    _, v_threshed = cv2.threshold(
+        v.astype(np.uint8), 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )
+    steps.append(("v thresh", v_threshed))
+    hsv_mask = hue_mask & sat_mask & v_threshed.astype(np.bool_)
+    steps.append(("h s v mask", hsv_mask))
 
     sat_pass = hue_mask & (s >= sat_floor)
     brightness = _gate_brightness(
@@ -130,7 +139,7 @@ def process_frame(
     mask = _as_mask(brightness)
     steps.append(("3. brightness gate", mask))
 
-    moments = cv2.moments(mask)
+    moments = cv2.moments(to_grey(hsv_mask))
     if moments["m00"] == 0:
         centroid = 0, 0
     else:
