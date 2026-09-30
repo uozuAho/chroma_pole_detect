@@ -15,7 +15,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from detectors.detector import Detector
+from detectors.detector import AdjustableParam, Detector
 from my_types import DetectCentroidResult
 
 HUE_GREEN = (40, 85)
@@ -70,6 +70,15 @@ class SoftGate(Detector):
             hue_soft=self.hue_soft,
             chroma_soft=self.chroma_soft,
         )
+
+    def adjustable_params(self) -> list[AdjustableParam]:
+        return []
+
+    def set_param(self, name: str, value) -> None:
+        raise ValueError(f"no adjustable params on {self.name}")
+
+    def get_param(self, name: str):
+        raise ValueError(f"no adjustable params on {self.name}")
 
 
 def _trapezoid(x: np.ndarray, left: float, peak_l: float, peak_r: float, right: float):

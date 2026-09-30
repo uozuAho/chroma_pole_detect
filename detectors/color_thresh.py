@@ -14,7 +14,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from detectors.detector import Detector
+from detectors.detector import AdjustableParam, Detector
 from my_types import DetectCentroidResult
 
 GREEN = ((40, 60, 60), (85, 255, 255))
@@ -34,6 +34,15 @@ class ColorThresh(Detector):
 
     def process_frame(self, image: np.ndarray) -> DetectCentroidResult:
         return process_frame(image)
+
+    def adjustable_params(self) -> list[AdjustableParam]:
+        return []
+
+    def set_param(self, name: str, value) -> None:
+        raise ValueError(f"no adjustable params on {self.name}")
+
+    def get_param(self, name: str):
+        raise ValueError(f"no adjustable params on {self.name}")
 
 
 def find_centroid(image_path: str | Path) -> DetectCentroidResult:

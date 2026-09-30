@@ -16,6 +16,7 @@ from detectors.comb_fit import CombFit
 from detectors.hue_gate import HueGate, Threshold
 from detectors.soft_gate import SoftGate
 from detectors.structure import StructureDetector
+from imgproc import to_rgb
 
 PROC_IMG_ROOT = Path("proc_img")
 REAL_CENTROIDS_PATH = Path("img/real_centroids.json")
@@ -53,7 +54,7 @@ def _save_steps(
     tiles = []
     for label, image in steps:
         if image.ndim == 2:
-            image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+            image = to_rgb(image)
         image = cv2.resize(image, (400, 300))
         cv2.putText(
             image,

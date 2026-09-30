@@ -16,7 +16,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from detectors.detector import Detector
+from detectors.detector import AdjustableParam, Detector
 from detectors.hue_gate import (
     DEFAULT_KEEP_FRAC,
     DEFAULT_SAT_FLOOR,
@@ -75,6 +75,15 @@ class ColumnProject(Detector):
             keep_frac=self.keep_frac,
             peak_keep=self.peak_keep,
         )
+
+    def adjustable_params(self) -> list[AdjustableParam]:
+        return []
+
+    def set_param(self, name: str, value) -> None:
+        raise ValueError(f"no adjustable params on {self.name}")
+
+    def get_param(self, name: str):
+        raise ValueError(f"no adjustable params on {self.name}")
 
 
 def process_frame(

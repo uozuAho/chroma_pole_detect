@@ -29,7 +29,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from detectors.detector import Detector
+from detectors.detector import AdjustableParam, Detector
 from imgproc import to_grey
 from my_types import DetectCentroidResult
 
@@ -86,6 +86,15 @@ class HueGate(Detector):
             val_floor=self.val_floor,
             keep_frac=self.keep_frac,
         )
+
+    def adjustable_params(self) -> list[AdjustableParam]:
+        return []
+
+    def set_param(self, name: str, value) -> None:
+        raise ValueError(f"no adjustable params on {self.name}")
+
+    def get_param(self, name: str):
+        raise ValueError(f"no adjustable params on {self.name}")
 
 
 def find_centroid(
